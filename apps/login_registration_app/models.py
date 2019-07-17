@@ -24,9 +24,10 @@ class UserManager(models.Manager):
         try:
             user = User.objects.get(email=postData["email"])
         except:
-            errors["email"] = "Not matching out database" 
-            if not bcrypt.checkpw(postData["password"].encode(), user.password):
-                errors["password"] = "Not matching our Database"
+            errors["email"] = "Not matching out database"
+            return errors
+        if not bcrypt.checkpw(postData["password"].encode(), user.password.encode()):
+            errors["password"] = "Not matching our Database"
         return errors
 
     

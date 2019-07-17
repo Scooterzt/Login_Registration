@@ -35,6 +35,7 @@ def login(request):
         for key, values in errors.items():
             messages.error(request, values)
         return redirect ("/")
+        
     user = User.objects.get(email=request.POST["email"])
     request.session["logged_user"] = user.id
     return redirect("/success")
