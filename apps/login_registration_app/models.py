@@ -21,9 +21,12 @@ class UserManager(models.Manager):
 
     def login_validation(self, postData):
         errors = {}
-        EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$')
-        if not EMAIL_REGEX.match(postData["email"]):
-            errors["email"] = "Invalid email address!"
+        try:
+            user = User.objects.get(email=postData["email"])
+        except:
+            errors["email"] = "Not matching out database" 
+            if not bcrypt.checkpw(postData["password"].encode(), user.password):
+                errors["password"] = "Not matching our Database"
         return errors
 
     

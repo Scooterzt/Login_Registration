@@ -29,6 +29,16 @@ def registration(request):
     request.session["logged_user"] = new_user.id 
     return redirect("/success")
 
+def login(request):
+    errors = User.objects.login_validation(request.POST)
+    if len(errors) > 0:
+        for key, values in errors.items():
+            messages.error(request, values)
+        return redirect ("/")
+    user = User.objects.get(email=request.POST["email"])
+    request.session["logged_user"] = user.id
+    return redirect("/success")
+
 def log_out(request):
     request.session.clear()
     return redirect ("/")
